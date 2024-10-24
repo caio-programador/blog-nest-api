@@ -11,9 +11,11 @@ export class CreateTableRole1729791892442 implements MigrationInterface {
                         name: 'id',
                         type: 'int',
                         isPrimary: true,
+                        isGenerated: true,
+                        generationStrategy: 'increment'
                     },
                     {
-                        name: 'name',
+                        name: 'role',
                         type: 'varchar'
                     }
                 ]
