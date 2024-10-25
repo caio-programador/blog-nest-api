@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private readonly usersService: UsersService) { }
   
   async login(loginDto: LoginDto): Promise<JwtResponse> {
-    const user = await this.usersService.validateUser(loginDto.email)
+    const user = await this.usersService.findUserByEmail(loginDto.email)
     const match = await this.checkPassword(loginDto.password, user)
 
     if (!match) {

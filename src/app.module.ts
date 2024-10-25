@@ -12,6 +12,6 @@ import { AuthModule } from './auth/auth.module';
   imports: [ConfigModule.forRoot({ isGlobal: true }),
     UsersModule, PostsModule, DatabaseModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}

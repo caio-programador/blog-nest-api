@@ -16,8 +16,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: process.env.JWT_SECRET
     })
   }
-  async validate(payload): Promise<User> {
+  async validate(payload: any): Promise<User> {
     const { email } = payload
-    return this.userService.validateUser(email)
+    return this.userService.findUserByEmail(email)
   }
 }
