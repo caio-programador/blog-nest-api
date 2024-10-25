@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "./role.entity";
+import { PostEntity } from "src/posts/entities/post.entity";
 
 @Entity('users')
 export class User {
@@ -14,8 +15,14 @@ export class User {
   @ManyToOne(() => Role, (role) => role.users, { eager: true })
   @JoinColumn({name: 'role_id'})
   role: Role
+
+
   @CreateDateColumn({type: 'timestamp'})
   createdAt: Date
   @UpdateDateColumn({type: 'timestamp'})
   updatedAt: Date
+
+  
+  @OneToMany(() => PostEntity, (post) => post.user)
+  posts: PostEntity[]
 }
