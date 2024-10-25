@@ -53,12 +53,14 @@ export class UsersService {
   async remove(request: Request): Promise<void> {
     const email= this.getEmailFromToken(request)
     const user = await this.findUserByEmail(email)
-
     await this.userRepository.remove(user)
   }
 
   public async findUserByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] })
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: ['role', 'posts']
+    })
     
     if (!user)
       throw new UnauthorizedException('User not found. Invalid Token')
