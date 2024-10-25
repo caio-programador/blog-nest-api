@@ -58,7 +58,7 @@ export class UsersService {
   }
 
   public async findUserByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { email } })
+    const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] })
     
     if (!user)
       throw new UnauthorizedException('User not found. Invalid Token')
@@ -66,7 +66,7 @@ export class UsersService {
     return user
   }
 
-  private getEmailFromToken(request: Request): string {
+  public getEmailFromToken(request: Request): string {
     const [, token] = request.headers.authorization.split(' ')
     try {
       const payload = verify(token, process.env.JWT_SECRET) 
