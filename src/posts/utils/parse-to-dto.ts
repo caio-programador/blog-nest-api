@@ -11,6 +11,7 @@ export const parseToDto = (post: PostEntity): PostResponse => {
         email: post.user.email,
       },
       post.createdAt,
-      post.updatedAt
+      post.updatedAt,
+      post.categories
     )
 }

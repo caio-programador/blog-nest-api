@@ -10,4 +10,8 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   description: string
+
+  @ApiProperty({ description: 'Categorias do post' })
+  @IsString({ each: true })
+  categories: string[]
 }
