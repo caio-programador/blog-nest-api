@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users.service';
 import { LoginDto } from '../dto/login.dto';
-import { JwtResponse } from '../dto/jwt-response';
 import { sign } from 'jsonwebtoken';
 import { Request } from 'express';
 import { User } from 'src/users/entities/user.entity';
@@ -11,17 +10,21 @@ import * as bcrypt from 'bcrypt'
 export class AuthService {
   constructor(private readonly usersService: UsersService) { }
   
-  async login(loginDto: LoginDto): Promise<JwtResponse> {
+  async login(loginDto: LoginDto): Promise<{accessToken: string}> {
     const user = await this.usersService.findUserByEmail(loginDto.email)
-    const match = await this.checkPassword(loginDto.password, user)
+
+    if (!user) {
+      throw new BadRequestException('Invalid credentials')
+    }
+    
+    const match = await this.checkPassword(loginDto.password, user)  
 
     if (!match) {
-      throw new BadRequestException('Invalid password')
+      throw new BadRequestException('Invalid credentials')
     }
 
     const jwtToken = await this.createAccessToken(user.id, user.role.id, user.email)
-    const response: JwtResponse = {email: user.email, token: jwtToken}
-    return response
+    return { accessToken: jwtToken }
   }
 
 

@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Simple Blog API')
     .setDescription('A simple blog API to improve my capabilities')
     .setVersion('SNAPSHOT:0.0.1')
+    .addBearerAuth()
     .build()
   const document = () => SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('docs', app, document)

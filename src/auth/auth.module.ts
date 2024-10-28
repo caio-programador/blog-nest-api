@@ -8,10 +8,11 @@ import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
 import { UsersService } from "src/users/services/users.service";
 import { JwtStrategy } from "./services/jwt.strategy";
+import { PostEntity } from "src/posts/entities/post.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Role]),
+    TypeOrmModule.forFeature([User, Role, PostEntity]),
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

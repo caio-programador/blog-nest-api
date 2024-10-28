@@ -5,27 +5,36 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../entities/user.entity';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiResponse({
+    status: 409, description: 'Email já cadastrado'
+  })
   @Post('register')
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
-
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'Acesso negado' })
   @UseGuards(AuthGuard('jwt'))
   @Get('details')
   async details(@Req() request: Request): Promise<User> {
     return this.usersService.details(request);
   }
-
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'Acesso negado' })
   @Patch('edit')
   @UseGuards(AuthGuard('jwt'))
   async update(@Req() request: Request, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(request, updateUserDto);
   }
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'Acesso negado' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('delete')
   @UseGuards(AuthGuard('jwt'))

@@ -1,4 +1,4 @@
-import { ConflictException, HttpException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,7 +8,6 @@ import { Role } from '../entities/role.entity';
 import { Request } from 'express';
 import * as bcrypt from 'bcrypt'
 import { verify } from 'jsonwebtoken';
-import { AuthService } from 'src/auth/services/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -61,9 +60,6 @@ export class UsersService {
       where: { email },
       relations: ['role', 'posts']
     })
-    
-    if (!user)
-      throw new UnauthorizedException('User not found. Invalid Token')
   
     return user
   }
