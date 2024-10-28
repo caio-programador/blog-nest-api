@@ -1,17 +1,17 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsString } from "class-validator"
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePostDto {
-  @ApiProperty({description: 'O Titulo do post'})
+  @ApiProperty({ description: 'O Titulo do post' })
   @IsString()
   @IsNotEmpty()
-  title: string
-  @ApiProperty({description: 'A descrição do post'})
+  title: string;
+  @ApiProperty({ description: 'A descrição do post' })
   @IsString()
   @IsNotEmpty()
-  description: string
+  description: string;
 
   @ApiProperty({ description: 'Categorias do post' })
   @IsString({ each: true })
-  categories: string[]
+  categories: string[];
 }

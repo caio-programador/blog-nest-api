@@ -1,11 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../entities/user.entity';
-import { ApiBearerAuth, ApiForbiddenResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RoleEnum } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -16,7 +34,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({
-    status: 409, description: 'Email já cadastrado'
+    status: 409,
+    description: 'Email já cadastrado',
   })
   @Post('register')
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -43,7 +62,6 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   async remove(@Req() request: Request) {
     await this.usersService.remove(request);
-
   }
 
   @Get()

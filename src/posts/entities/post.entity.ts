@@ -1,30 +1,40 @@
-import { User } from "src/users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Category } from "./category.entity";
+import { User } from 'src/users/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Category } from './category.entity';
 
 @Entity('posts')
-export class PostEntity { 
+export class PostEntity {
   @PrimaryGeneratedColumn('increment')
-  id: number
+  id: number;
 
   @Column()
-  title: string
+  title: string;
 
   @Column()
-  description: string
+  description: string;
 
-  @CreateDateColumn({type: 'timestamp'})
-  createdAt: Date
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
-  @UpdateDateColumn({type: 'timestamp'})
-  updatedAt: Date
-  
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
+
   @ManyToOne(() => User, (user) => user.posts)
-  @JoinColumn({name: 'user_id'})
-  user: User
-  
-  @ManyToMany(() => Category, category => category.posts, { cascade: true })
-    @ManyToMany(() => Category, (category) => category.posts, { cascade: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToMany(() => Category, (category) => category.posts, { cascade: true })
+  @ManyToMany(() => Category, (category) => category.posts, { cascade: true })
   @JoinTable({
     name: 'posts_categories_categories',
     joinColumn: {
@@ -36,6 +46,5 @@ export class PostEntity {
       referencedColumnName: 'id',
     },
   })
-  categories: Category[]
-
+  categories: Category[];
 }

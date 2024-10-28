@@ -18,11 +18,11 @@ import { User } from 'src/users/entities/user.entity';
           password: String(configService.get('DB_PASS')),
           database: configService.get('DB_NAME'),
           entities: [Role, User, PostEntity, Category],
-          synchronize: false
-        }
+          synchronize: false,
+        };
       },
-      inject: [ConfigService]
-    })
-  ]
+      inject: [ConfigService],
+    }),
+  ],
 })
 export class DatabaseModule {}

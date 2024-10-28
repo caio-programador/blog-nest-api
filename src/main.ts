@@ -10,15 +10,17 @@ async function bootstrap() {
     .setDescription('A simple blog API to improve my capabilities')
     .setVersion('SNAPSHOT:0.0.1')
     .addBearerAuth()
-    .build()
-  const document = () => SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('docs', app, document)
+    .build();
+  const document = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    whitelist: true,
-    forbidNonWhitelisted: true
-  }))
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

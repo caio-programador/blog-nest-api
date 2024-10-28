@@ -1,10 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { PostsService } from '../services/posts.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { ApiBearerAuth, ApiNotFoundResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -33,10 +50,13 @@ export class PostsController {
   @ApiUnauthorizedResponse({ description: 'Acesso negado' })
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  async update(@Req() request: Request, @Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  async update(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
     return this.postsService.update(request, +id, updatePostDto);
   }
-
 
   @ApiBearerAuth()
   @ApiNotFoundResponse({ description: 'Post não encontrado' })
