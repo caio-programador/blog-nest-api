@@ -74,6 +74,8 @@ export class UsersService {
     }
   }
 
-
+  findAll(): User[] | Promise<User[]> {
+    return this.userRepository.find({relations: ['role', 'posts']})
+  }
 
 }

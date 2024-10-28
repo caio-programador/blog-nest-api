@@ -5,7 +5,10 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../entities/user.entity';
-import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiForbiddenResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RoleEnum } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -41,5 +44,14 @@ export class UsersController {
   async remove(@Req() request: Request) {
     await this.usersService.remove(request);
 
+  }
+
+  @Get()
+  @Roles(RoleEnum.ADMIN)
+  @ApiForbiddenResponse({ description: 'Você precisa ser um admin' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  async findAll(): Promise<User[]> {
+    return this.usersService.findAll();
   }
 }
