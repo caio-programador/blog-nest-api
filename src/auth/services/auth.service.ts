@@ -3,11 +3,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from 'src/users/services/users.service';
+import { UsersService } from '../../users/services/users.service';
 import { LoginDto } from '../dto/login.dto';
 import { sign } from 'jsonwebtoken';
 import { Request } from 'express';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -58,7 +58,7 @@ export class AuthService {
     return AuthService.jwtExtractor;
   }
 
-  private async checkPassword(password: string, user: User): Promise<boolean> {
+  public async checkPassword(password: string, user: User): Promise<boolean> {
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       throw new BadRequestException('Wrong password');
