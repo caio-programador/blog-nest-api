@@ -63,10 +63,10 @@ export class UsersController {
     await this.usersService.remove(request);
   }
 
-  @Get()
-  @Roles(RoleEnum.ADMIN)
   @ApiForbiddenResponse({ description: 'Você precisa ser um admin' })
   @ApiBearerAuth()
+  @Get()
+  @Roles(RoleEnum.ADMIN)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();

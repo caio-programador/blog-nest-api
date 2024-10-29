@@ -30,6 +30,6 @@ export class User {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @OneToMany(() => PostEntity, (post) => post.user)
+  @OneToMany(() => PostEntity, (post) => post.user, {onDelete: 'CASCADE', cascade: true})
   posts: PostEntity[];
 }

@@ -51,6 +51,7 @@ export class CreateTablePosts1729862832861 implements MigrationInterface {
         columnNames: ['user_id'],
         referencedTableName: 'users',
         referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
       }),
     );
   }

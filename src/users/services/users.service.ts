@@ -46,7 +46,9 @@ export class UsersService {
 
   async update(request: Request, updateUserDto: UpdateUserDto) {
     const email = this.getEmailFromToken(request);
-    const user = await this.userRepository.preload({ ...updateUserDto, email });
+    let user = await this.findUserByEmail(email);
+    user = await this.userRepository
+      .preload({ ...updateUserDto, id: user.id });
     if (!user) throw new NotFoundException('User with this id does not exists');
 
     return this.userRepository.save(user);
@@ -55,7 +57,7 @@ export class UsersService {
   async remove(request: Request): Promise<void> {
     const email = this.getEmailFromToken(request);
     const user = await this.findUserByEmail(email);
-    await this.userRepository.remove(user);
+    await this.userRepository.delete(user.id);
   }
 
   public async findUserByEmail(email: string): Promise<User> {

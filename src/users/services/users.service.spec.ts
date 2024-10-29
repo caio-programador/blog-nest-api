@@ -110,7 +110,7 @@ describe('UsersService', () => {
       jest.spyOn(userRepository, 'remove').mockResolvedValue({} as any);
 
       await service.remove({} as any);
-      expect(userRepository.remove).toHaveBeenCalled();
+      expect(userRepository.delete).toHaveBeenCalled();
     })
   })
 

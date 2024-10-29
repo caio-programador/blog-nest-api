@@ -10,7 +10,7 @@ export class AddForeingKeysToPostCateogories1730139049046
         columnNames: ['postId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'posts',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
       }),
     );
 
@@ -20,7 +20,7 @@ export class AddForeingKeysToPostCateogories1730139049046
         columnNames: ['categoryId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'categories',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
       }),
     );
   }
