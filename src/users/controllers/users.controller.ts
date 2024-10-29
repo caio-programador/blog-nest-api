@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   Req,
   UseGuards,
@@ -24,9 +23,9 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Roles } from 'src/decorators/roles.decorator';
-import { RoleEnum } from 'src/enums/role.enum';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { RoleEnum } from '../../enums/role.enum';
+import { RolesGuard } from '../../guards/roles.guard';
 
 @ApiTags('users')
 @Controller('users')
