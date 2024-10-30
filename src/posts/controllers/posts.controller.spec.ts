@@ -8,16 +8,15 @@ import { Category } from '../entities/category.entity';
 import { User } from '../../users/entities/user.entity';
 import { Role } from '../../users/entities/role.entity';
 import { CreatePostDto } from '../dto/create-post.dto';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 describe('PostsController', () => {
   let controller: PostsController;
   let service: PostsService;
   let usersService: UsersService;
-  let createPostDto: CreatePostDto
-  let newPost: any
-  let user: any
-  
+  let createPostDto: CreatePostDto;
+  let newPost: any;
+  let user: any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,7 +40,7 @@ describe('PostsController', () => {
             findOne: jest.fn(),
             find: jest.fn(),
             create: jest.fn(),
-          }
+          },
         },
         {
           provide: getRepositoryToken(User),
@@ -49,14 +48,14 @@ describe('PostsController', () => {
             findOne: jest.fn(),
             find: jest.fn(),
             create: jest.fn(),
-          }
+          },
         },
         {
           provide: getRepositoryToken(Role),
           useValue: {
             findOne: jest.fn(),
-          }
-        }
+          },
+        },
       ],
     }).compile();
 
@@ -68,7 +67,7 @@ describe('PostsController', () => {
       title: 'Post title',
       description: 'Post content',
       categories: ['Category 1', 'Category 2'],
-    }
+    };
     user = {
       id: 1,
       name: 'John Doe',
@@ -76,15 +75,14 @@ describe('PostsController', () => {
       password: '123456',
       role: {
         id: 1,
-        name: 'User'
-      }
-    }
+        name: 'User',
+      },
+    };
     newPost = {
       id: 1,
       ...createPostDto,
-      user: user
-    }
-
+      user: user,
+    };
   });
 
   it('should be defined', () => {
@@ -100,8 +98,8 @@ describe('PostsController', () => {
 
       expect(post.title).toStrictEqual(createPostDto.title);
       expect(service.create).toHaveBeenCalled();
-    })
-  })
+    });
+  });
 
   describe('finds', () => {
     it('should return all posts', async () => {
@@ -111,7 +109,7 @@ describe('PostsController', () => {
 
       expect(posts).toStrictEqual([newPost]);
       expect(service.findAll).toHaveBeenCalled();
-    })
+    });
     it('should return a post', async () => {
       jest.spyOn(service, 'findOne').mockResolvedValue(newPost as any);
 
@@ -119,12 +117,11 @@ describe('PostsController', () => {
 
       expect(post).toStrictEqual(newPost);
       expect(service.findOne).toHaveBeenCalled();
-    })
-    it('should throw a not found exception', async () => {
-      await expect(controller.findOne('1'))
-        .rejects.toThrow(NotFoundException);
     });
-  })
+    it('should throw a not found exception', async () => {
+      await expect(controller.findOne('1')).rejects.toThrow(NotFoundException);
+    });
+  });
 
   describe('update', () => {
     it('should update a post', async () => {
@@ -135,25 +132,25 @@ describe('PostsController', () => {
 
       expect(post).toStrictEqual(newPost);
       expect(service.update).toHaveBeenCalled();
-    })
+    });
     it('should throw a not found exception', async () => {
-      await expect(controller.update({} as any, '1', createPostDto))
-        .rejects.toThrow(NotFoundException);
-    })
-
-  })
+      await expect(
+        controller.update({} as any, '1', createPostDto),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
   describe('remove', () => {
     it('should remove a post', async () => {
       jest.spyOn(service, 'remove').mockResolvedValue(undefined);
 
       await controller.remove({} as any, '1');
 
-      expect(service.remove).toHaveBeenCalled
-    })
+      expect(service.remove).toHaveBeenCalled();
+    });
     it('should throw a not found exception', async () => {
-      await expect(controller.remove({} as any, '1'))
-        .rejects.toThrow(NotFoundException);
-    })
-
-  })
+      await expect(controller.remove({} as any, '1')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
 });

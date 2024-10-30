@@ -13,14 +13,11 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 describe('PostsService', () => {
   let service: PostsService;
   let usersService: UsersService;
-  let postRepository: Repository<PostEntity>
-  let categoryRepository: Repository<Category>
-  let userRepository: Repository<User>
-  let roleRepository: Repository<Role>
-  let post: CreatePostDto
-  let user: any
-  let bigPost: any
-    
+  let postRepository: Repository<PostEntity>;
+  let post: CreatePostDto;
+  let user: any;
+  let bigPost: any;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -35,7 +32,7 @@ describe('PostsService', () => {
             findOne: jest.fn(),
             preload: jest.fn(),
             remove: jest.fn(),
-          }
+          },
         },
         {
           provide: getRepositoryToken(Category),
@@ -44,7 +41,7 @@ describe('PostsService', () => {
             save: jest.fn(),
             findOne: jest.fn(),
             find: jest.fn(),
-          }
+          },
         },
         {
           provide: getRepositoryToken(User),
@@ -59,39 +56,31 @@ describe('PostsService', () => {
             findOne: jest.fn(),
           },
         },
-
       ],
     }).compile();
 
     service = module.get<PostsService>(PostsService);
     usersService = module.get<UsersService>(UsersService);
-    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    roleRepository = module.get<Repository<Role>>(getRepositoryToken(Role));
-    postRepository = module.get<Repository<PostEntity>>(getRepositoryToken(PostEntity));
-    categoryRepository = module.get<Repository<Category>>(getRepositoryToken(Category));
-    
+    postRepository = module.get<Repository<PostEntity>>(
+      getRepositoryToken(PostEntity),
+    );
+
     post = {
       title: 'Post title',
       description: 'Post content',
-      categories: [
-        'category1',
-        'category2'
-      ]
-    }
-
-    
+      categories: ['category1', 'category2'],
+    };
 
     user = {
       id: 1,
-      email: 'john@gmail.com'
-    }
+      email: 'john@gmail.com',
+    };
 
     bigPost = {
       id: 1,
       ...post,
-      user: user
-    }
-
+      user: user,
+    };
   });
 
   it('should be defined', () => {
@@ -109,7 +98,7 @@ describe('PostsService', () => {
       expect(newPost.title).toEqual(post.title);
       expect(newPost.categories).toEqual(post.categories);
     });
-  })
+  });
 
   describe('finds', () => {
     it('should find all posts', async () => {
@@ -118,7 +107,7 @@ describe('PostsService', () => {
       const posts = await service.findAll();
 
       expect(posts).toEqual([bigPost]);
-    })
+    });
 
     it('should find a post by id', async () => {
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(bigPost as any);
@@ -126,14 +115,14 @@ describe('PostsService', () => {
       const post = await service.findOne(1);
 
       expect(post).toEqual(bigPost);
-    })
+    });
 
     it('should throw Not Found Exception', async () => {
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
     });
-  })
+  });
 
   describe('update', () => {
     it('should update a post', async () => {
@@ -147,28 +136,33 @@ describe('PostsService', () => {
 
       expect(updatedPost.title).toEqual(post.title);
       expect(updatedPost.categories).toEqual(post.categories);
-    })
+    });
 
     it('should throw Not Found Exception', async () => {
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(null);
 
-      await expect(service.update({} as any, 1, post)).rejects.toThrow(NotFoundException);
+      await expect(service.update({} as any, 1, post)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw Forbidden Exception', async () => {
-      jest.spyOn(usersService, 'getEmailFromToken').mockReturnValue('pedro@gmail.com');
-      jest.spyOn(usersService, 'findUserByEmail')
+      jest
+        .spyOn(usersService, 'getEmailFromToken')
+        .mockReturnValue('pedro@gmail.com');
+      jest
+        .spyOn(usersService, 'findUserByEmail')
         .mockResolvedValue({ id: 2, email: 'pedro@gmail.com' } as any);
-      
+
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(bigPost as any);
       jest.spyOn(postRepository, 'preload').mockResolvedValue(bigPost as any);
       jest.spyOn(postRepository, 'save').mockResolvedValue(bigPost as any);
 
-      await expect(service.update({} as any, 1, post))
-        .rejects.toThrow(ForbiddenException);
+      await expect(service.update({} as any, 1, post)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
-  })
-
+  });
 
   describe('delete', () => {
     it('should remove a post', async () => {
@@ -179,24 +173,30 @@ describe('PostsService', () => {
 
       await service.remove({} as any, 1);
       expect(postRepository.remove).toHaveBeenCalled();
-    })
+    });
 
     it('should throw Not Found Exception', async () => {
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(null);
 
-      await expect(service.remove({} as any, 1)).rejects.toThrow(NotFoundException);
+      await expect(service.remove({} as any, 1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw Forbidden Exception', async () => {
-      jest.spyOn(usersService, 'getEmailFromToken').mockReturnValue('pedro@gmail.com');
-      jest.spyOn(usersService, 'findUserByEmail')
+      jest
+        .spyOn(usersService, 'getEmailFromToken')
+        .mockReturnValue('pedro@gmail.com');
+      jest
+        .spyOn(usersService, 'findUserByEmail')
         .mockResolvedValue({ id: 2, email: 'pedro@gmail.com' } as any);
-      
+
       jest.spyOn(postRepository, 'findOne').mockResolvedValue(bigPost as any);
       jest.spyOn(postRepository, 'remove').mockResolvedValue({} as any);
 
-      await expect(service.remove({} as any, 1))
-        .rejects.toThrow(ForbiddenException);
+      await expect(service.remove({} as any, 1)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
-  })
-})
+  });
+});

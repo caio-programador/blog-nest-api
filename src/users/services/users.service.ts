@@ -3,7 +3,6 @@ import {
   HttpException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
@@ -47,8 +46,7 @@ export class UsersService {
   async update(request: Request, updateUserDto: UpdateUserDto) {
     const email = this.getEmailFromToken(request);
     let user = await this.findUserByEmail(email);
-    user = await this.userRepository
-      .preload({ ...updateUserDto, id: user.id });
+    user = await this.userRepository.preload({ ...updateUserDto, id: user.id });
     if (!user) throw new NotFoundException('User with this id does not exists');
 
     return this.userRepository.save(user);
@@ -57,7 +55,7 @@ export class UsersService {
   async remove(request: Request): Promise<void> {
     const email = this.getEmailFromToken(request);
     const user = await this.findUserByEmail(email);
-    await this.userRepository.delete(user.id);
+    await this.userRepository.remove(user);
   }
 
   public async findUserByEmail(email: string): Promise<User> {
@@ -75,7 +73,7 @@ export class UsersService {
       const payload = verify(token, process.env.JWT_SECRET);
       return payload['email'];
     } catch (error) {
-      throw new HttpException('An unexpected Error', 500);
+      throw new HttpException(`An unexpected Error - ${error}`, 500);
     }
   }
 

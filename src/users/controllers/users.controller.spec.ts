@@ -11,7 +11,6 @@ describe('UsersController', () => {
   let controller: UsersController;
   let usersService: UsersService;
   let userRepository: Repository<User>;
-  let roleRepository: Repository<Role>;
   let createUserDto: CreateUserDto;
 
   beforeEach(async () => {
@@ -36,19 +35,18 @@ describe('UsersController', () => {
             findOne: jest.fn(),
           },
         },
-      ]
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
     usersService = module.get<UsersService>(UsersService);
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    roleRepository = module.get<Repository<Role>>(getRepositoryToken(Role));
 
     createUserDto = {
       name: 'John Doe',
       email: 'john@gmail.com',
       password: '123456',
-    }
+    };
   });
 
   it('should be defined', () => {
@@ -57,7 +55,9 @@ describe('UsersController', () => {
 
   describe('create', () => {
     it('should create a user', async () => {
-      jest.spyOn(usersService, 'create').mockResolvedValue(createUserDto as any);
+      jest
+        .spyOn(usersService, 'create')
+        .mockResolvedValue(createUserDto as any);
 
       const user = await controller.create(createUserDto);
 
@@ -68,13 +68,16 @@ describe('UsersController', () => {
     it('should throw a conflict exception', async () => {
       jest.spyOn(userRepository, 'existsBy').mockResolvedValue(true);
 
-      await expect(controller.create(createUserDto))
-        .rejects.toThrow(ConflictException);
+      await expect(controller.create(createUserDto)).rejects.toThrow(
+        ConflictException,
+      );
     });
   });
-  describe('details', () => { 
+  describe('details', () => {
     it('should return information about an user', async () => {
-      jest.spyOn(usersService, 'details').mockResolvedValue(createUserDto as any);
+      jest
+        .spyOn(usersService, 'details')
+        .mockResolvedValue(createUserDto as any);
 
       const result = await controller.details({} as any);
 
@@ -84,12 +87,14 @@ describe('UsersController', () => {
 
   describe('update', () => {
     it('should update user', async () => {
-      jest.spyOn(usersService, 'update').mockResolvedValue(createUserDto as any);
+      jest
+        .spyOn(usersService, 'update')
+        .mockResolvedValue(createUserDto as any);
 
       const result = await controller.update({} as any, createUserDto);
 
       expect(result).toBe(createUserDto as any);
-    })
+    });
   });
 
   describe('remove', () => {
@@ -99,16 +104,18 @@ describe('UsersController', () => {
       await controller.remove({} as any);
 
       expect(usersService.remove).toHaveBeenCalled();
-    })
-  })
+    });
+  });
 
-  describe('findAll', () => { 
+  describe('findAll', () => {
     it('should return all users', async () => {
-      jest.spyOn(usersService, 'findAll').mockResolvedValue([createUserDto] as any);
+      jest
+        .spyOn(usersService, 'findAll')
+        .mockResolvedValue([createUserDto] as any);
 
       const result = await controller.findAll();
 
       expect(result).toStrictEqual([createUserDto] as any);
     });
-  })
+  });
 });
