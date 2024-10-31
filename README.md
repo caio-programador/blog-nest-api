@@ -48,8 +48,10 @@ The project uses migrations to handle the creation of tables and foreign keys. T
 
 ```bash
 # apply the migrations
-$ npx typeorm migration:run -d dist/src/database/orm.migrations.config.js
+npx typeorm migration:run -d orm.migrations.config.js
 ```
+
+You can also run the `docker-compose.yaml` to quick test the API, you just need to create a .env file to configuring the environments variables.
 
 ## Support
 
